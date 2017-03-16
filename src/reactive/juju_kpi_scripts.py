@@ -193,10 +193,13 @@ def install_files():
 
     # Package prerequisites for juju-kpi-scripts/thirdparty/*
     apt_install([
+        'python-swiftclient'
+        'python3-click',
         'python-configparser',
-        'python-prometheus-client',
+        'python3-prometheus-client',
         'python-cssselect',
         'python-yaml',
         'python-urllib3',
         'sqlite3',
+        'python3-jujubundlelib',
     ])

@@ -38,4 +38,4 @@ do
 done
 
 cd /srv/juju-kpi-scripts/parts/
-python -u longrunning.py
+python3 -u longrunning.py
