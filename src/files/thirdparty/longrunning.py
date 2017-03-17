@@ -28,7 +28,33 @@ def compute_model_ages(conn, day):
             HAVING model_hits.day=?)
         GROUP BY running
         ORDER BY running DESC;'''
-    res = c.execute(sql, [day]).fetchall()
+    res = c.execute(sql).fetchall()
+    return res
+
+
+def popular_charms(conn):
+    c = conn.cursor()
+    sql = '''
+        SELECT appname, COUNT(appname) as Count
+        from application_hits
+        WHERE
+            day = (SELECT day from application_hits GROUP BY day ORDER BY day DESC LIMIT 1)
+            AND
+            uuid NOT IN (
+                SELECT DISTINCT uuid
+                FROM application_hits
+                WHERE
+                    day = (
+                        SELECT day
+                        FROM application_hits
+                        GROUP BY day
+                        ORDER BY day
+                        DESC LIMIT 1
+                    ) and appname='keystone'
+            )
+        GROUP BY appname
+        ORDER BY Count DESC;'''
+    res = c.execute(sql).fetchall()
     return res
 
 
@@ -106,6 +132,20 @@ def register_last_day_stats(registry):
             registry=registry,
         )
         age_last_day.labels(age).set(models_num)
+
+
+    # Register last days charm popularity
+    apps = popular_charms(conn)
+    for row in apps:
+        downloads = row[1]
+        app_name = row[0]
+        app_last_day = Gauge(
+            'live_juju_app_{}_last_day'.format(app_name),
+            'Application {} popularity on {}'.format(app_name, day),
+            ['app'],
+            registry=registry,
+        )
+        app_last_day.labels(app_name).set(downloads)
 
 
 if __name__ == "__main__":

@@ -128,7 +128,7 @@
               "legendFormat": "{{name}}",
               "metric": "live_juju_age_101_last_day",
               "refId": "A",
-              "step": 10
+              "step": 20
             }
           ],
           "thresholds": [],
@@ -495,13 +495,14 @@
           "fill": 1,
           "id": 7,
           "legend": {
+            "alignAsTable": false,
             "avg": false,
-            "current": false,
+            "current": true,
             "max": false,
             "min": false,
             "show": false,
             "total": false,
-            "values": false
+            "values": true
           },
           "lines": false,
           "linewidth": 1,
@@ -556,7 +557,7 @@
           "thresholds": [],
           "timeFrom": null,
           "timeShift": null,
-          "title": "Models lifespan",
+          "title": "Models age in days",
           "tooltip": {
             "shared": false,
             "sort": 0,
@@ -574,7 +575,7 @@
           "yaxes": [
             {
               "format": "short",
-              "label": null,
+              "label": "# Models",
               "logBase": 1,
               "max": null,
               "min": null,
@@ -582,13 +583,73 @@
             },
             {
               "format": "dtdurations",
-              "label": "",
+              "label": "age in days",
               "logBase": 1,
               "max": null,
               "min": null,
-              "show": true
+              "show": false
             }
           ]
+        }
+      ],
+      "repeat": null,
+      "repeatIteration": null,
+      "repeatRowId": null,
+      "showTitle": false,
+      "title": "Dashboard Row",
+      "titleSize": "h6"
+    },
+    {
+      "collapse": false,
+      "height": 250,
+      "panels": [
+        {
+          "columns": [
+            {
+              "text": "Current",
+              "value": "current"
+            }
+          ],
+          "datasource": "prometheus - Juju generated source",
+          "fontSize": "100%",
+          "id": 9,
+          "links": [],
+          "pageSize": null,
+          "scroll": true,
+          "showHeader": true,
+          "sort": {
+            "col": 1,
+            "desc": true
+          },
+          "span": 12,
+          "styles": [
+            {
+              "colorMode": null,
+              "colors": [
+                "rgba(245, 54, 54, 0.9)",
+                "rgba(237, 129, 40, 0.89)",
+                "rgba(50, 172, 45, 0.97)"
+              ],
+              "decimals": 0,
+              "pattern": "/.*/",
+              "thresholds": [],
+              "type": "number",
+              "unit": "short"
+            }
+          ],
+          "targets": [
+            {
+              "expr": "{__name__=~\"live_juju_app_.*_last_day\"}",
+              "intervalFactor": 2,
+              "legendFormat": "{{app}}",
+              "metric": "live_juju_app_abot_epc_basic_last_day",
+              "refId": "A",
+              "step": 30
+            }
+          ],
+          "title": "Charm popularity",
+          "transform": "timeseries_aggregations",
+          "type": "table"
         }
       ],
       "repeat": null,
@@ -636,5 +697,5 @@
   },
   "timezone": "browser",
   "title": "Juju Stats",
-  "version": 4
+  "version": 8
 }
